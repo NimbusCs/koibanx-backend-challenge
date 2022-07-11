@@ -6,7 +6,7 @@ const config = require('config');
 
 const bodyParser = require('body-parser')
 const basicAuth = require('express-basic-auth');
-const mwBasicAuth = require('./middlewares/basic-auth');
+const mwBasicAuth = require('./middleware/basic-auth');
 
 const logger = require('./utils/logger');
 const app = express();
