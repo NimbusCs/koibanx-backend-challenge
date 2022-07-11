@@ -1,19 +1,30 @@
+require('dotenv').config({path:__dirname+'/.env'});
+
 const mongoose = require('mongoose');
+const express = require('express');
+const config = require('config');
+
+const bodyParser = require('body-parser')
+const basicAuth = require('express-basic-auth');
+const mwBasicAuth = require('./middlewares/basic-auth');
+
 const logger = require('./utils/logger');
+const app = express();
+
 mongoose.Promise = Promise;
 
-const express = require('express')
-const app = express()
-const dotenv = require('dotenv');
-dotenv.config();
-const config = require('config');
-mongoose.connect('mongodb://' + config.get('mongodb.address') + '/' + config.get('mongodb.dbname'), { useNewUrlParser: true, useUnifiedTopology: true });
-require('./utils/initializer').init()
+mongoose.connect(
+  `mongodb+srv://${config.get('mongodb.address')}/${config.get('mongodb.dbname')}?retryWrites=true&w=majority`,
+  { useNewUrlParser: true, useUnifiedTopology: true }
+);
 
-app.use('/api', require('./routes/stores'));
+require('./utils/initializer').init();
 
-// Start the server
+app.use(bodyParser.json());
+app.use(basicAuth(mwBasicAuth));
+app.use('/api', require('./routes/stores.js'));
+
 app.listen(config.get('port'));
 logger.info('API initialized on port ' + config.get('port'));
 
-module.exports = app
+module.exports = app;

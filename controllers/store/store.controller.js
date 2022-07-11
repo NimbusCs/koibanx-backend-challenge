@@ -1,4 +1,5 @@
 const Store = require("../../models/store");
+const currencyFormatter = require('../../utils/currency-formatter')();
 
 const get =(req, res) => {
   let pageOptions = {
@@ -12,7 +13,7 @@ const get =(req, res) => {
         name: element.name,
         cuit: element.cuit,
         concepts: element.concepts,
-        currentBalance: element.currentBalance,
+        currentBalance: currencyFormatter.format(element.currentBalance),
         active: element.active ? 'Si' : 'No',
         lastSale: new Date(element.lastSale).toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}),
       }
