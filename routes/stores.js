@@ -1,8 +1,9 @@
-const logger = require('../utils/logger');
+const { get, post } = require('../controllers/store/store.controller');
 const express = require('express');
 const router = express.Router();
 
 router.route('/stores')
-  .get(function(){logger.info("pending validations")}, function(){logger.info("pending use case")});
+  .get(get)
+  .post(post)
 
 module.exports = router;
